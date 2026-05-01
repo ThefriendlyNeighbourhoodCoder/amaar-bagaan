@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function allowedUser() {
+      return signedIn()
+        && request.auth.token.email in [
+          "akash.mactavish11@gmail.com",
+          "akashpatra0412personal@gmail.com",
+          "sangitapatra988@gmail.com"
+        ];
+    }
+
+    match /{document=**} {
+      allow read, write: if allowedUser();
+    }
+  }
+}
